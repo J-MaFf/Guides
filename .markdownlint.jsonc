@@ -1,0 +1,5 @@
+// Disable MD033 to allow HTML page breaks for PDF generation
+{
+    "MD013": false,
+    "MD033": false
+}
