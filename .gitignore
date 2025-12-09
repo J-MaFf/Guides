@@ -1,0 +1,24 @@
+# General
+.DS_Store
+Thumbs.db
+*.log
+
+# Dependencies
+node_modules/
+
+# IDE
+.vscode/extensions.json
+.vscode/*.log
+
+# Environment
+.env
+.env.local
+*.pem
+
+# OS
+*.swp
+*.swo
+*~
+
+# Note: knowledge-graph.json is intentionally NOT ignored
+# It will be tracked in Git for backup and sync purposes
