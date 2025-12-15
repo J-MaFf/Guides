@@ -230,8 +230,8 @@ For applying rules to many repositories at once, use the included `apply-branch-
    - ✗ No restrictions on branch creation (allows free branching)
    - ✗ No restrictions on updates outside of PR flow (allows merges)
 3. **Shows a confirmation prompt** before making changes
-4. **Removes any existing rulesets** before creating the new one (to avoid conflicts)
-4. **Displays results** with success/failure count for each repository
+4. **Skips repos with existing rulesets** to preserve custom configurations
+5. **Displays results** with success/failure count for each repository
 
 **Important Notes:**
 

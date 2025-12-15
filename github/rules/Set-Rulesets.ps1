@@ -50,7 +50,7 @@ param(
 )
 
 # Function to apply ruleset to a single repo
-function Apply-BranchRuleset {
+function Set-BranchRuleset {
     param(
         [string]$Repo
     )
@@ -144,11 +144,11 @@ else {
     # Interactive mode
     Write-Host "Enter repository names (owner/repo format), one per line. Leave blank when done:`n" -ForegroundColor Yellow
     do {
-        $input = Read-Host "Repo"
-        if ($input) {
-            $reposToProcess += $input
+        $repoInput = Read-Host "Repo"
+        if ($repoInput) {
+            $reposToProcess += $repoInput
         }
-    } while ($input)
+    } while ($repoInput)
 }
 
 if ($reposToProcess.Count -eq 0) {
@@ -181,7 +181,7 @@ $successCount = 0
 $failureCount = 0
 
 foreach ($repo in $reposToProcess) {
-    if (Apply-BranchRuleset -Repo $repo) {
+    if (Set-BranchRuleset -Repo $repo) {
         $successCount++
     }
     else {
