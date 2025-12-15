@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: PowerShell Tests & Linting
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        pwsh-version: [ '7.2', '7.3', '7.4' ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PowerShell ${{ matrix.pwsh-version }}
+        uses: PowerShell/setup-powershell@v2
+        with:
+          pwsh-version: ${{ matrix.pwsh-version }}
+
+      - name: Install Pester
+        shell: pwsh
+        run: |
+          Install-Module -Name Pester -Force -Scope CurrentUser
+          Import-Module Pester
+
+      - name: Run Pester tests
+        shell: pwsh
+        run: |
+          $config = New-PesterConfiguration
+          $config.Run.Path = "github/rules/Main branch ruleset/tests"
+          $config.Run.Exit = $true
+          Invoke-Pester -Configuration $config
+
+      - name: Install PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
+
+      - name: Run PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          $scriptPath = "github/rules/Main branch ruleset/Set-Rulesets.ps1"
+          $results = Invoke-ScriptAnalyzer -Path $scriptPath -Severity Warning
+          if ($results) {
+            Write-Host "PSScriptAnalyzer findings:"
+            $results | Format-Table -AutoSize
+            exit 1
+          }
+
+  lint-markdown:
+    name: Markdown Linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install markdownlint-cli
+        run: npm install -g markdownlint-cli
+
+      - name: Run Markdown Linting
+        run: markdownlint '**/*.md' --config misc/.markdownlint.jsonc
