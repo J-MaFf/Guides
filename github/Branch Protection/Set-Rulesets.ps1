@@ -75,15 +75,6 @@ function Apply-BranchRuleset {
             }
             rules       = @(
                 @{
-                    type = "creation"
-                },
-                @{
-                    type = "update"
-                },
-                @{
-                    type = "deletion"
-                },
-                @{
                     type = "non_fast_forward"
                 },
                 @{

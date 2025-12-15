@@ -8,12 +8,11 @@ GitHub **Rulesets** are the modern replacement for branch protection rules, offe
 
 The rulesets protect your `main` or `master` branch from accidental or harmful changes by requiring:
 
-- [x] All automated status checks to pass before merging
-- [x] Branches to be up-to-date before merging
+- [x] All pull requests before merging (no direct commits to main)
 - [x] All conversations on code to be resolved before merging
 - [x] No approval reviews required (designed for solo development)
 - [x] No force pushes allowed
-- [x] No branch deletions allowed
+- [x] Stale reviews dismissed when new commits are pushed
 
 ---
 
@@ -161,10 +160,12 @@ You have three options to configure rulesets:
 5. Set **Enforcement status** to **Active**
 6. Under **Target branches**, add `main` (or your target branch)
 7. Enable these rules:
-   - ✅ **Require status checks to pass** (with strict mode enabled)
    - ✅ **Require a pull request before merging** with conversation resolution enabled
-   - ✅ **Restrict deletions** (prevent branch deletion)
-   - ✅ **Restrict force pushes** (no force pushes allowed)
+   - ✅ **Dismiss stale pull request approvals** when new commits are pushed
+   - ✅ **Block force pushes** (no force pushes allowed)
+   - ✗ **Do NOT restrict branch creation** (allows free branching)
+   - ✗ **Do NOT restrict branch updates** (allows PR merges)
+   - ✗ **Do NOT restrict deletions** (allows cleanup)
    - ✗ **Do NOT require pull request reviews** (no approval needed for solo development)
 8. Click **Create ruleset**
 
@@ -220,15 +221,14 @@ For applying rules to many repositories at once, use the included `apply-branch-
 
 1. **Fetches the default branch** for each repository (typically `main`)
 2. **Creates or replaces rulesets** using the GitHub REST API with the following rules:
-   - ✅ Restrict branch creation
-   - ✅ Restrict branch updates (requires pull request)
-   - ✅ Block force pushes
-   - ✅ Prevent branch deletion
-   - ✅ Require pull request before merging
-   - ✅ Dismiss stale pull request approvals when new commits are pushed
-   - ✅ Require conversation resolution before merging
-   - ✅ Allow merge, squash, and rebase merge methods
-   - ❌ No approval reviews required (solo developer friendly)
+   - ✅ Block force pushes (protects git history)
+   - ✅ Require pull request before merging (prevents direct commits)
+   - ✅ Dismiss stale pull request approvals when new commits are pushed (keeps reviews current)
+   - ✅ Require conversation resolution before merging (ensures discussions are addressed)
+   - ✅ Allow merge, squash, and rebase merge methods (flexible merging)
+   - ✗ No approval reviews required (solo developer friendly)
+   - ✗ No restrictions on branch creation (allows free branching)
+   - ✗ No restrictions on updates outside of PR flow (allows merges)
 3. **Shows a confirmation prompt** before making changes
 4. **Removes any existing rulesets** before creating the new one (to avoid conflicts)
 4. **Displays results** with success/failure count for each repository
@@ -289,15 +289,15 @@ The job name in your workflow file is what appears in GitHub's branch protection
 
 ### Advanced Configuration (Ruleset Rules)
 
-The `apply-branch-protection.ps1` script creates rulesets with these rules:
+The `Set-Rulesets.ps1` script creates rulesets with these rules:
 
 | Rule Type | Setting | Purpose |
 |-----------|---------|---------|
-| `required_status_checks` | `strict_required_status_checks_policy = true` | Branches must be up-to-date before merging |
+| `non_fast_forward` | — | No force pushes allowed (protects history) |
 | `pull_request` | `required_review_thread_resolution = true` | Conversation resolution required |
+| `pull_request` | `dismiss_stale_reviews_on_push = true` | Stale reviews auto-dismissed on new commits |
 | `pull_request` | `required_approving_review_count = 0` | No approval reviews required (solo dev) |
-| `non_fast_forward` | — | No force pushes allowed |
-| `deletion` | — | Branch deletion not allowed |
+| `pull_request` | `allowed_merge_methods = [merge, squash, rebase]` | Flexible merge strategies |
 
 ---
 
@@ -305,19 +305,20 @@ The `apply-branch-protection.ps1` script creates rulesets with these rules:
 
 ### The Rationale
 
-1. **Status Checks**: Ensures automated tests/linting pass before merging—catches bugs early
+1. **Pull Requests Required**: Prevents accidental direct commits to main—ensures everything goes through code review workflow
 2. **Conversation Resolution**: Requires discussion of any feedback before merging—prevents oversights
-3. **Up-to-Date Branches**: Prevents merge conflicts and ensures main is always stable
-4. **No Force Pushes**: Protects git history integrity and prevents data loss
-5. **No Deletions**: Prevents accidental branch deletion
-6. **No Approval Reviews**: Solo developers don't need approval gates; CI automation is sufficient
+3. **No Force Pushes**: Protects git history integrity and prevents data loss
+4. **Stale Review Dismissal**: Auto-dismisses outdated reviews when new commits are pushed—keeps feedback current
+5. **No Approval Reviews**: Solo developers don't need approval gates; the PR workflow is sufficient
+6. **Flexible Merging**: Supports merge, squash, and rebase strategies for different use cases
 
 ### Design for Solo Developers
 
 The `Set-Rulesets.ps1` script is specifically designed for solo developers:
 
 - **Zero approval reviews required**: You don't need to wait for someone else to approve your code
-- **Automated checks only**: Your GitHub Actions workflows are the only gate—fast and objective
+- **PR-based workflow**: Forces a branching/PR workflow instead of committing directly—better for tracking changes
+- **No restrictive rules**: Allows free branch creation and merging of PRs without overly strict gates
 - **Batch application**: Apply to all your repos at once instead of configuring each one manually
 - **Safe replacement**: The script cleanly replaces rulesets without losing configuration data
 - **Modern approach**: Uses GitHub's recommended Rulesets feature, not legacy branch protection
