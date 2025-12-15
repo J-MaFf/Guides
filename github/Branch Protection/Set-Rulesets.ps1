@@ -1,13 +1,13 @@
 <#
 .SYNOPSIS
-Applies standard branch protection rules to GitHub repositories using gh CLI.
+Applies standard branch protection rulesets to GitHub repositories using gh CLI.
 
 .DESCRIPTION
-This script applies consistent branch protection rules to one or more GitHub repositories.
-Rules include: required status checks, conversation resolution, no force pushes, and no deletions.
+This script applies consistent branch protection rulesets to one or more GitHub repositories.
+Rulesets include: required status checks, conversation resolution, no force pushes, and no deletions.
 No approval reviews required (designed for solo developers).
 
-For detailed information about branch protection rules and GitHub Actions workflows, see:
+For detailed information about rulesets and GitHub Actions workflows, see:
   C:\Users\jmaffiola\Documents\Guides\github\github-branch-protection-and-status-checks.md
 
 .PARAMETER Repos
@@ -41,42 +41,92 @@ See Also:
 param(
     [Parameter(ValueFromPipeline = $true)]
     [string[]]$Repos,
-    
+
     [switch]$ApplyToAll
 )
 
-# Function to apply protection to a single repo
-function Apply-BranchProtection {
+# Function to apply ruleset to a single repo
+function Apply-BranchRuleset {
     param(
         [string]$Repo
     )
-    
+
     Write-Host "Processing $Repo..." -ForegroundColor Cyan
-    
+
     # Get default branch
     $branch = gh repo view $Repo --json defaultBranchRef --jq '.defaultBranchRef.name' 2>$null
     if (-not $branch) {
         $branch = "main"
     }
-    
+
     Write-Host "  Default branch: $branch"
-    
-    # Apply branch protection rule
+
+    # Apply ruleset
     try {
-        gh api repos/$Repo/branches/$branch/protection `
-            -X PUT `
-            -f required_status_checks='{"strict":true,"contexts":[]}' `
-            -f enforce_admins=true `
-            -f required_pull_request_reviews='null' `
-            -f restrictions='null' `
-            -f allow_force_pushes=false `
-            -f allow_deletions=false `
-            -f block_creations=false `
-            -f required_conversation_resolution=true `
-            -f lock_branch=false 2>&1 | Out-Null
-        
-        Write-Host "  ✓ Branch protection applied" -ForegroundColor Green
-        return $true
+        $rulesetPayload = @{
+            name        = "Main Branch Ruleset"
+            target      = "branch"
+            enforcement = "active"
+            conditions  = @{
+                ref_name = @{
+                    include = @("refs/heads/$branch")
+                    exclude = @()
+                }
+            }
+            rules       = @(
+                @{
+                    type = "creation"
+                },
+                @{
+                    type = "update"
+                },
+                @{
+                    type = "deletion"
+                },
+                @{
+                    type = "non_fast_forward"
+                },
+                @{
+                    type       = "pull_request"
+                    parameters = @{
+                        required_approving_review_count   = 0
+                        dismiss_stale_reviews_on_push     = $true
+                        required_reviewers                = @()
+                        require_code_owner_review         = $false
+                        require_last_push_approval        = $false
+                        required_review_thread_resolution = $true
+                        allowed_merge_methods             = @("merge", "squash", "rebase")
+                    }
+                }
+            )
+        } | ConvertTo-Json -Depth 10
+
+        $tempFile = [System.IO.Path]::GetTempFileName()
+        $rulesetPayload | Set-Content $tempFile
+
+        # First, check if ruleset exists and delete it
+        $existingRulesets = gh api repos/$Repo/rulesets --jq '.[].id' 2>$null
+        if ($existingRulesets) {
+            foreach ($rulesetId in $existingRulesets) {
+                gh api repos/$Repo/rulesets/$rulesetId -X DELETE 2>$null
+            }
+        }
+
+        # Create new ruleset
+        $response = gh api repos/$Repo/rulesets `
+            -X POST `
+            --input $tempFile 2>&1
+
+        Remove-Item $tempFile -Force
+
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "  ✓ Ruleset applied" -ForegroundColor Green
+            return $true
+        }
+        else {
+            Write-Host "  ✗ Failed: $response" -ForegroundColor Red
+            return $false
+        }
     }
     catch {
         Write-Host "  ✗ Failed: $_" -ForegroundColor Red
@@ -113,15 +163,16 @@ if ($reposToProcess.Count -eq 0) {
 
 # Confirm before applying
 Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host "Branch Protection Rules to Apply:" -ForegroundColor Cyan
+Write-Host "Rulesets to Apply:" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "✓ Required status checks to pass before merging"
-Write-Host "✓ Branches must be up-to-date before merging"
-Write-Host "✓ Conversation resolution required"
-Write-Host "✓ Enforce admin restrictions"
-Write-Host "✗ No approval reviews required"
-Write-Host "✗ Force pushes not allowed"
-Write-Host "✗ Deletions not allowed"
+Write-Host "✓ Restrict branch creation"
+Write-Host "✓ Restrict branch updates (requires PR)"
+Write-Host "✓ Restrict branch deletion"
+Write-Host "✓ Block force pushes"
+Write-Host "✓ Require a pull request before merging"
+Write-Host "✓ Dismiss stale pull request approvals when new commits are pushed"
+Write-Host "✓ Require conversation resolution before merging"
+Write-Host "✓ Allow merge, squash, and rebase merge methods"
 Write-Host "`nRepositories: $($reposToProcess.Count)`n" -ForegroundColor Cyan
 
 $confirm = Read-Host "Continue? (y/n)"
@@ -137,7 +188,7 @@ $successCount = 0
 $failureCount = 0
 
 foreach ($repo in $reposToProcess) {
-    if (Apply-BranchProtection -Repo $repo) {
+    if (Apply-BranchRuleset -Repo $repo) {
         $successCount++
     }
     else {
