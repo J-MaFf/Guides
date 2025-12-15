@@ -5,11 +5,11 @@ BeforeAll {
 Describe "Set-Rulesets.ps1 Syntax Validation" {
     It "Should have valid PowerShell syntax" {
         $errors = $null
-        $ast = [System.Management.Automation.Language.Parser]::ParseFile(
+        [System.Management.Automation.Language.Parser]::ParseFile(
             $Script:ScriptPath,
             [ref]$null,
             [ref]$errors
-        )
+        ) | Out-Null
         $errors.Count | Should -Be 0
     }
 

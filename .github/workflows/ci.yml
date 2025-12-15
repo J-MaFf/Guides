@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
@@ -12,13 +12,13 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        pwsh-version: [ '7.2', '7.3', '7.4' ]
+        pwsh-version: ["7.2", "7.3", "7.4"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up PowerShell ${{ matrix.pwsh-version }}
-        uses: PowerShell/setup-powershell@v2
+        uses: PowerShell/setup-powershell@v4
         with:
           pwsh-version: ${{ matrix.pwsh-version }}
 
@@ -62,7 +62,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: "18"
 
       - name: Install markdownlint-cli
         run: npm install -g markdownlint-cli
