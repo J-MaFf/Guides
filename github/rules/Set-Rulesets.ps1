@@ -4,11 +4,14 @@ Applies standard branch protection rulesets to GitHub repositories using gh CLI.
 
 .DESCRIPTION
 This script applies consistent branch protection rulesets to one or more GitHub repositories.
-Rulesets include: required status checks, conversation resolution, no force pushes, and no deletions.
+Rulesets include: required pull requests, conversation resolution, and no force pushes.
 No approval reviews required (designed for solo developers).
 
+If a repository already has a ruleset, it will be skipped to preserve any custom configuration
+(such as status checks or custom rules). Only repositories without existing rulesets will be updated.
+
 For detailed information about rulesets and GitHub Actions workflows, see:
-  C:\Users\jmaffiola\Documents\Guides\github\github-branch-protection-and-status-checks.md
+  github-branch-protection-and-status-checks.md
 
 .PARAMETER Repos
 Array of repository names in format "owner/repo" (e.g., "J-MaFf/gitconfig").
@@ -19,20 +22,21 @@ If specified, applies rules to all repositories the user has access to.
 
 .EXAMPLE
 # Apply to single repo
-.\apply-branch-protection.ps1 -Repos "J-MaFf/gitconfig"
+.\Set-Rulesets.ps1 -Repos "J-MaFf/gitconfig"
 
 # Apply to multiple repos
-.\apply-branch-protection.ps1 -Repos "J-MaFf/gitconfig", "J-MaFf/Guides"
+.\Set-Rulesets.ps1 -Repos "J-MaFf/gitconfig", "J-MaFf/Guides"
 
 # Apply to all repos
-.\apply-branch-protection.ps1 -ApplyToAll
+.\Set-Rulesets.ps1 -ApplyToAll
 
 # Interactive mode (prompts for repo names)
-.\apply-branch-protection.ps1
+.\Set-Rulesets.ps1
 
 .NOTES
 Requires: gh CLI installed and authenticated
 Date: 2025-12-15
+Location: github/rules/Set-Rulesets.ps1
 
 See Also:
   github-branch-protection-and-status-checks.md - Full setup and troubleshooting guide
@@ -95,15 +99,15 @@ function Apply-BranchRuleset {
         $tempFile = [System.IO.Path]::GetTempFileName()
         $rulesetPayload | Set-Content $tempFile
 
-        # First, check if ruleset exists and delete it
+        # Check if ruleset already exists
         $existingRulesets = gh api repos/$Repo/rulesets --jq '.[].id' 2>$null
         if ($existingRulesets) {
-            foreach ($rulesetId in $existingRulesets) {
-                gh api repos/$Repo/rulesets/$rulesetId -X DELETE 2>$null
-            }
+            Write-Host "  ⊘ Ruleset already exists (ID: $existingRulesets), skipping to preserve custom configuration" -ForegroundColor Yellow
+            Remove-Item $tempFile -Force
+            return $true
         }
 
-        # Create new ruleset
+        # Create new ruleset only if it doesn't exist
         $response = gh api repos/$Repo/rulesets `
             -X POST `
             --input $tempFile 2>&1
@@ -156,15 +160,13 @@ if ($reposToProcess.Count -eq 0) {
 Write-Host "`n========================================" -ForegroundColor Cyan
 Write-Host "Rulesets to Apply:" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "✓ Restrict branch creation"
-Write-Host "✓ Restrict branch updates (requires PR)"
-Write-Host "✓ Restrict branch deletion"
-Write-Host "✓ Block force pushes"
-Write-Host "✓ Require a pull request before merging"
-Write-Host "✓ Dismiss stale pull request approvals when new commits are pushed"
-Write-Host "✓ Require conversation resolution before merging"
-Write-Host "✓ Allow merge, squash, and rebase merge methods"
-Write-Host "`nRepositories: $($reposToProcess.Count)`n" -ForegroundColor Cyan
+Write-Host "✓ Block force pushes (protects git history)"
+Write-Host "✓ Require a pull request before merging (prevents direct commits)"
+Write-Host "✓ Dismiss stale pull request approvals when new commits are pushed (keeps reviews current)"
+Write-Host "✓ Require conversation resolution before merging (ensures discussions addressed)"
+Write-Host "✓ Allow merge, squash, and rebase merge methods (flexible merging)"
+Write-Host "`nNote: Repos with existing rulesets will be skipped to preserve custom configurations`n"
+Write-Host "Repositories: $($reposToProcess.Count)`n" -ForegroundColor Cyan
 
 $confirm = Read-Host "Continue? (y/n)"
 if ($confirm -ne "y") {
