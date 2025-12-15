@@ -43,7 +43,7 @@ type `Hello` in the search bar → **Sign-in options**
 
 Once you complete your Windows Hello setup, please follow our [Passkey guide](https://drive.google.com/file/d/1lG6nqo1ZVP2rrIt8hJGnLyQbK8R7yt7S/view?usp=sharing).
 
-<div class="page"/>
+<div class="page"></div>
 
 ## 🔧 Quick Troubleshooting
 

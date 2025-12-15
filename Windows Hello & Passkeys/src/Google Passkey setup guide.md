@@ -11,7 +11,7 @@ A passkey is a modern, secure way to sign in to an account (In this case, your G
 
 ---
 
-## 1️⃣ Create a Passkey for Your Google Account
+## Create a Passkey for Your Google Account
 
 1. **Open Google Passkey Settings:**
    - Go to [g.co/passkeys](https://g.co/passkeys) in your browser and sign in to your Google account.
@@ -26,7 +26,7 @@ A passkey is a modern, secure way to sign in to an account (In this case, your G
 
 ---
 
-## 2️⃣ How to Use Your Passkey to Sign In
+## How to Use Your Passkey to Sign In
 
 1. **Go to a Google Sign-In Page:**
    - For example, [accounts.google.com](https://accounts.google.com)
@@ -38,7 +38,7 @@ A passkey is a modern, secure way to sign in to an account (In this case, your G
    - Use Windows Hello, fingerprint, or your device’s unlock method.
 5. **You’re In!**
 
-<div class="page"/>
+<div class="page"></div>
 
 ## 🛠️ Troubleshooting
 
