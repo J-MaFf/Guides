@@ -21,4 +21,4 @@ node_modules/
 *~
 
 # Note: knowledge-graph.jsonl is intentionally NOT ignored
-# It will be tracked in Git for backup and sync purposes
+# It will be tracked in Git for backup and sync purposes (Memory MCP server knowledge graph)
