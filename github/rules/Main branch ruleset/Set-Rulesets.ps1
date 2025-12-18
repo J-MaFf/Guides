@@ -51,6 +51,7 @@ param(
 
 # Function to apply ruleset to a single repo
 function Set-BranchRuleset {
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
     param(
         [string]$Repo
     )
@@ -108,18 +109,25 @@ function Set-BranchRuleset {
         }
 
         # Create new ruleset only if it doesn't exist
-        $response = gh api repos/$Repo/rulesets `
-            -X POST `
-            --input $tempFile 2>&1
+        if ($PSCmdlet.ShouldProcess($Repo, "Apply branch protection ruleset")) {
+            $response = gh api repos/$Repo/rulesets `
+                -X POST `
+                --input $tempFile 2>&1
 
-        Remove-Item $tempFile -Force
+            Remove-Item $tempFile -Force
 
-        if ($LASTEXITCODE -eq 0) {
-            Write-Host "  ✓ Ruleset applied" -ForegroundColor Green
-            return $true
+            if ($LASTEXITCODE -eq 0) {
+                Write-Host "  ✓ Ruleset applied" -ForegroundColor Green
+                return $true
+            }
+            else {
+                Write-Host "  ✗ Failed: $response" -ForegroundColor Red
+                return $false
+            }
         }
         else {
-            Write-Host "  ✗ Failed: $response" -ForegroundColor Red
+            Write-Host "  Skipped applying ruleset to $Repo" -ForegroundColor Yellow
+            Remove-Item $tempFile -Force
             return $false
         }
     }
