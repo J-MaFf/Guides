@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up PowerShell ${{ matrix.pwsh-version }}
-        uses: PowerShell/setup-powershell@v4
+        uses: powershell/setup-powershell@v4
         with:
           pwsh-version: ${{ matrix.pwsh-version }}
 
