@@ -36,7 +36,7 @@ jobs:
       - name: Run PSScriptAnalyzer
         shell: pwsh
         run: |
-          $scriptPath = "github/rules/Set-Rulesets.ps1"
+          $scriptPath = "github/rules/Main branch ruleset/Set-Rulesets.ps1"
           $results = Invoke-ScriptAnalyzer -Path $scriptPath -Severity Warning
           if ($results) {
             Write-Host "PSScriptAnalyzer findings:"
