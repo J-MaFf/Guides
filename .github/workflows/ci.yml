@@ -10,17 +10,9 @@ jobs:
   test:
     name: PowerShell Tests & Linting
     runs-on: windows-latest
-    strategy:
-      matrix:
-        pwsh-version: ["7.2", "7.3", "7.4"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Set up PowerShell ${{ matrix.pwsh-version }}
-        uses: powershell/setup-powershell@v4
-        with:
-          pwsh-version: ${{ matrix.pwsh-version }}
 
       - name: Install Pester
         shell: pwsh
@@ -44,7 +36,7 @@ jobs:
       - name: Run PSScriptAnalyzer
         shell: pwsh
         run: |
-          $scriptPath = "github/rules/Main branch ruleset/Set-Rulesets.ps1"
+          $scriptPath = "github/rules/Set-Rulesets.ps1"
           $results = Invoke-ScriptAnalyzer -Path $scriptPath -Severity Warning
           if ($results) {
             Write-Host "PSScriptAnalyzer findings:"
