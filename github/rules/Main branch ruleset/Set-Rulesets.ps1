@@ -49,6 +49,13 @@ param(
     [switch]$ApplyToAll
 )
 
+process {
+    # Process pipeline input
+    if ($PSBoundParameters.ContainsKey('Repos')) {
+        # Repos provided via param or pipeline
+    }
+}
+
 # Function to apply ruleset to a single repo
 function Set-BranchRuleset {
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
