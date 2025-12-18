@@ -292,7 +292,7 @@ The job name in your workflow file is what appears in GitHub's branch protection
 The `Set-Rulesets.ps1` script creates rulesets with these rules:
 
 | Rule Type | Setting | Purpose |
-|-----------|---------|---------|
+| --- | --- | --- |
 | `non_fast_forward` | — | No force pushes allowed (protects history) |
 | `pull_request` | `required_review_thread_resolution = true` | Conversation resolution required |
 | `pull_request` | `dismiss_stale_reviews_on_push = true` | Stale reviews auto-dismissed on new commits |
