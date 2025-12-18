@@ -43,7 +43,6 @@ See Also:
 #>
 
 param(
-    [Parameter(ValueFromPipeline = $true)]
     [string[]]$Repos,
 
     [switch]$ApplyToAll

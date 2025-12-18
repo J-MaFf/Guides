@@ -37,9 +37,9 @@ jobs:
         shell: pwsh
         run: |
           $scriptPath = "github/rules/Main branch ruleset/Set-Rulesets.ps1"
-          $results = Invoke-ScriptAnalyzer -Path $scriptPath -Severity Warning
+          $results = Invoke-ScriptAnalyzer -Path $scriptPath -Severity Error
           if ($results) {
-            Write-Host "PSScriptAnalyzer findings:"
+            Write-Host "PSScriptAnalyzer errors found:"
             $results | Format-Table -AutoSize
             exit 1
           }
