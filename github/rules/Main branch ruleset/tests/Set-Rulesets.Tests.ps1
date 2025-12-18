@@ -16,8 +16,8 @@ Describe "Set-Rulesets.ps1 Syntax Validation" {
     It "Should define required parameters" {
         $content = Get-Content $Script:ScriptPath -Raw
         $content | Should -Match "param\("
-        $content | Should -Match "\[string\[\]\]\$Repos"
-        $content | Should -Match "\[switch\]\$ApplyToAll"
+        $content | Should -Match "\[string\[\]\]\`$Repos"
+        $content | Should -Match "\[switch\]\`$ApplyToAll"
     }
 
     It "Should define Set-BranchRuleset function" {
