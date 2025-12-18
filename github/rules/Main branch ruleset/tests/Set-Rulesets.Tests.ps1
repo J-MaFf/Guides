@@ -27,7 +27,8 @@ Describe "Set-Rulesets.ps1 Syntax Validation" {
 
     It "Should have proper parameter attributes" {
         $content = Get-Content $Script:ScriptPath -Raw
-        $content | Should -Match "Parameter\(ValueFromPipeline"
+        $content | Should -Match "\[string\[\]\]\`$Repos"
+        $content | Should -Match "\[switch\]\`$ApplyToAll"
     }
 }
 
