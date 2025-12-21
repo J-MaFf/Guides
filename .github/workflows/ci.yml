@@ -17,8 +17,9 @@ jobs:
       - name: Install Pester
         shell: pwsh
         run: |
+          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
           Register-PSRepository -Default -ErrorAction SilentlyContinue
-          Install-Module -Name Pester -Force -Scope CurrentUser
+          Install-Module -Name Pester -Force -Scope CurrentUser -Repository PSGallery
           Import-Module Pester
 
       - name: Run Pester tests
@@ -32,8 +33,9 @@ jobs:
       - name: Install PSScriptAnalyzer
         shell: pwsh
         run: |
+          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
           Register-PSRepository -Default -ErrorAction SilentlyContinue
-          Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
+          Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser -Repository PSGallery
 
       - name: Run PSScriptAnalyzer
         shell: pwsh
