@@ -1,15 +1,6 @@
 // Disable MD033 to allow HTML page breaks for PDF generation
 // Disable MD026 to allow colons in headings (used for context/examples)
-// Disable MD031 to allow flexible spacing around code blocks
-// Disable MD032 to allow flexible list spacing
-// Disable MD040 to allow code blocks without language specification
-// Disable MD060 to allow compact table formatting
 {
-    "MD013": false,
     "MD026": false,
-    "MD031": false,
-    "MD032": false,
-    "MD033": false,
-    "MD040": false,
-    "MD060": false
+    "MD033": false
 }
