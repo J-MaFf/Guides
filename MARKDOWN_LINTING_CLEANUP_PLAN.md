@@ -35,6 +35,7 @@ Current violations: ~5 across `github/rules/` READMEs
 
 Lines: 5, 54, 59, 66, 72, 73, 82, 93, 99, 100, 101, 102
 Break long lines by:
+
 - Wrapping URLs in separate lines or into footnotes
 - Splitting environment variable descriptions
 - Reformatting inline code examples
@@ -45,6 +46,7 @@ Estimated time: 20 minutes
 
 Lines: 5, 7, 9, 21, 182, 196, 223, 226, 238, 280, 284-286, 288, 297-300, 308-313, 319-324, 356, 374
 Systematic line wrapping, especially for:
+
 - Long headings (reduce verbosity)
 - Long URLs (move to footnotes or shorten descriptions)
 - Command examples (use code blocks with proper line breaks)
