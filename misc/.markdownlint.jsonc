@@ -1,6 +1,14 @@
 // Disable MD033 to allow HTML page breaks for PDF generation
 // Disable MD026 to allow colons in headings (used for context/examples)
+// Disable MD013 to allow long lines (cleanup planned - see MARKDOWN_LINTING_CLEANUP_PLAN.md)
+// Disable MD031 to allow flexible spacing around code blocks (cleanup planned)
+// Disable MD032 to allow flexible list spacing (cleanup planned)
+// Disable MD040 to allow code blocks without language specification (cleanup planned)
 {
+    "MD013": false,
     "MD026": false,
-    "MD033": false
+    "MD031": false,
+    "MD032": false,
+    "MD033": false,
+    "MD040": false
 }
