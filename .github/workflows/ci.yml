@@ -18,8 +18,11 @@ jobs:
         shell: pwsh
         run: |
           [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-          Register-PSRepository -Default -ErrorAction SilentlyContinue
-          Install-Module -Name Pester -Force -Scope CurrentUser -Repository PSGallery
+          $repo = Get-PSRepository -Name PSGallery -ErrorAction SilentlyContinue
+          if (-not $repo) {
+            Register-PSRepository -Default -ErrorAction SilentlyContinue
+          }
+          Install-Module -Name Pester -Force -Scope CurrentUser -AllowClobber
           Import-Module Pester
 
       - name: Run Pester tests
@@ -34,8 +37,11 @@ jobs:
         shell: pwsh
         run: |
           [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-          Register-PSRepository -Default -ErrorAction SilentlyContinue
-          Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser -Repository PSGallery
+          $repo = Get-PSRepository -Name PSGallery -ErrorAction SilentlyContinue
+          if (-not $repo) {
+            Register-PSRepository -Default -ErrorAction SilentlyContinue
+          }
+          Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser -AllowClobber
 
       - name: Run PSScriptAnalyzer
         shell: pwsh
