@@ -17,6 +17,7 @@ jobs:
       - name: Install Pester
         shell: pwsh
         run: |
+          Register-PSRepository -Default -ErrorAction SilentlyContinue
           Install-Module -Name Pester -Force -Scope CurrentUser
           Import-Module Pester
 
@@ -31,6 +32,7 @@ jobs:
       - name: Install PSScriptAnalyzer
         shell: pwsh
         run: |
+          Register-PSRepository -Default -ErrorAction SilentlyContinue
           Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
 
       - name: Run PSScriptAnalyzer
