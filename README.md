@@ -11,15 +11,22 @@ Located in `Windows Hello & Passkeys/src/`:
 - **[Windows Hello Setup Guide](Windows%20Hello%20&%20Passkeys/src/Windows%20Hello%20setup%20guide.md)** - Device-level biometric authentication setup for Windows
 - **[Google Passkey Setup Guide](Windows%20Hello%20&%20Passkeys/src/Google%20Passkey%20setup%20guide.md)** - Account-level passwordless authentication using Google Passkeys
 
-### 📚 Additional Resources
+### 📚 Miscellaneous Guides
 
-Root directory contains departmental guides and reference materials:
+Located in [`misc/`](misc/README.md):
 
-- JDL UPS Installation guide
-- KC VPN connection steps
-- SFA Alphabetical Customer ID Entry
-- Zebra RMA guide
-- And more...
+- **[JDL UPS Installation guide](misc/JDL%20UPS%20Installation%20guide.docx)** - UPS hardware installation instructions
+- **[KC VPN connection steps](misc/KC%20VPN%20connection%20steps.pdf)** - VPN connection instructions
+- **[SFA Alphabetical Customer ID Entry](misc/SFA%20Alphabetical%20Customer%20ID%20Entry_2024.8.29.pdf)** - Customer ID reference
+- **[Zebra RMA guide](misc/Zebra%20RMA%20guide.png)** - Zebra printer RMA process
+- **[Gmail labels and filters](misc/Gmail%20labels%20and%20filters.pdf)** - Gmail inbox configuration reference
+- **[New ADP Timesheet](misc/New%20ADP%20Timesheet.xlsx)** - ADP timesheet template
+
+### 🤖 Copilot Guides
+
+Located in [`Copilot guides/`](Copilot%20guides/README.md):
+
+- **[MEMORY_MCP_SERVER_FIX.md](Copilot%20guides/MEMORY_MCP_SERVER_FIX.md)** - Fix for Memory MCP Server configuration in VS Code
 
 ## 🎯 Guide Philosophy
 
