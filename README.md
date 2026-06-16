@@ -64,7 +64,6 @@ Guides/
 ├── github/
 │   └── rules/
 │       ├── README.md                  # Ruleset automation overview
-│       ├── Set-Rulesets.ps1           # (legacy copy — see note in #22)
 │       ├── Main Branch Ruleset.json   # Reference configuration
 │       ├── github-branch-protection-and-status-checks.md
 │       ├── Main branch ruleset/
