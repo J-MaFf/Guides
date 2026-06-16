@@ -193,7 +193,7 @@ gh api repos/$repo/rulesets `
 
 ### Option C: Automated PowerShell Script (Multiple Repositories)
 
-For applying rules to many repositories at once, use the included `apply-branch-protection.ps1` script. This script automates the setup process and can be applied to single or multiple repositories.
+For applying rules to many repositories at once, use the included `Set-Rulesets.ps1` script. This script automates the setup process and can be applied to single or multiple repositories.
 
 **Prerequisites:**
 
@@ -205,16 +205,16 @@ For applying rules to many repositories at once, use the included `apply-branch-
 
 ```powershell
 # Apply to a single repo
-.\apply-branch-protection.ps1 -Repos "J-MaFf/gitconfig"
+.\Set-Rulesets.ps1 -Repos "J-MaFf/gitconfig"
 
 # Apply to multiple repos
-.\apply-branch-protection.ps1 -Repos "J-MaFf/gitconfig", "J-MaFf/Guides"
+.\Set-Rulesets.ps1 -Repos "J-MaFf/gitconfig", "J-MaFf/Guides"
 
 # Apply to all your repos (with confirmation)
-.\apply-branch-protection.ps1 -ApplyToAll
+.\Set-Rulesets.ps1 -ApplyToAll
 
 # Interactive mode (prompts for repo names one at a time)
-.\apply-branch-protection.ps1
+.\Set-Rulesets.ps1
 ```
 
 **What the Script Does:**
