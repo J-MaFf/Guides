@@ -33,7 +33,7 @@ All guides in this repository follow a **quick-start approach** designed for 5-m
 
 ## 📝 Creating New Guides
 
-Use the provided **[_TEMPLATE_guide.md](_TEMPLATE_guide.md)** as your starting point for consistency. The template includes:
+Use the provided **[_TEMPLATE_guide.md](misc/_TEMPLATE_guide.md)** as your starting point for consistency. The template includes:
 
 - Standard structure with numbered sections
 - Pre-requisites section
@@ -49,16 +49,39 @@ Use the provided **[_TEMPLATE_guide.md](_TEMPLATE_guide.md)** as your starting p
 ### File Structure
 
 ```txt
-guides/
-├── _TEMPLATE_guide.md                 # Template for new guides
-├── .markdownlint.jsonc                # Linting configuration
+Guides/
+├── README.md                          # This file
+├── test.txt                           # CI test artifact
+├── Copilot guides/
+│   └── MEMORY_MCP_SERVER_FIX.md      # GitHub Copilot MCP memory fix guide
 ├── Windows Hello & Passkeys/
 │   ├── src/                           # Source markdown files
 │   │   ├── Windows Hello setup guide.md
-│   │   └── Google Passkey setup guide.md
+│   │   ├── Google Passkey setup guide.md
+│   │   └── email.md
 │   ├── Windows Hello setup guide.pdf
 │   └── Google Passkey setup guide.pdf
-└── [Additional departmental guides]
+├── github/
+│   └── rules/
+│       ├── README.md                  # Ruleset automation overview
+│       ├── Set-Rulesets.ps1           # (legacy copy — see note in #22)
+│       ├── Main Branch Ruleset.json   # Reference configuration
+│       ├── github-branch-protection-and-status-checks.md
+│       ├── Main branch ruleset/
+│       │   ├── Set-Rulesets.ps1       # Canonical script (tested by CI)
+│       │   └── tests/
+│       │       └── Set-Rulesets.Tests.ps1
+│       └── Status checks/
+│           └── README.md
+└── misc/
+    ├── _TEMPLATE_guide.md             # Template for new guides
+    ├── .markdownlint.jsonc            # Linting configuration
+    ├── Gmail labels and filters.pdf
+    ├── JDL UPS Installation guide.docx
+    ├── KC VPN connection steps.pdf
+    ├── New ADP Timesheet.xlsx
+    ├── SFA Alphabetical Customer ID Entry_2024.8.29.pdf
+    └── Zebra RMA guide.png
 ```
 
 ## 🔄 Development Workflow
