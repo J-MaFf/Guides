@@ -35,7 +35,7 @@ If specified, applies rules to all repositories the user has access to.
 
 .NOTES
 Requires: gh CLI installed and authenticated
-Date: 2025-12-15
+Date: 2026-06-16
 Location: github/rules/Main branch ruleset/Set-Rulesets.ps1
 
 See Also:
