@@ -332,6 +332,6 @@ For solo developers using these rulesets:
 ## 📝 Notes
 
 - **Script location:** `github/rules/Main branch ruleset/Set-Rulesets.ps1`
-- **Last updated:** December 15, 2025
+- **Last updated:** June 16, 2026
 - **Designed for:** Solo developers and small teams
 - **Approach:** Non-destructive (skips existing rulesets)
