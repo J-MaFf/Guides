@@ -95,7 +95,7 @@ When instructing Copilot to apply this to other repositories:
 ## Common Errors and Solutions
 
 | Error | Cause | Solution |
-|-------|-------|----------|
+| ------- | ------- | ---------- |
 | `Variable workspaceFolder can not be resolved` | Using workspace variable in global config | Move config to `.vscode/mcp.json` (workspace-level) |
 | Memory tools not available | Wrong config key or file location | Check `.vscode/mcp.json` exists and uses "servers" key |
 | Knowledge graph not persisting to file | Server running in memory only | Ensure `MEMORY_FILE_PATH` env var is set correctly |
