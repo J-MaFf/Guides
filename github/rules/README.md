@@ -4,7 +4,7 @@ This directory contains the automation scripts and configuration templates for m
 
 ## 📁 Contents
 
-- **Set-Rulesets.ps1** - PowerShell automation script for applying rulesets to repositories
+- **[Main branch ruleset/Set-Rulesets.ps1](Main%20branch%20ruleset/Set-Rulesets.ps1)** - PowerShell automation script for applying rulesets to repositories (canonical copy, tested by CI)
 - **Main Branch Ruleset.json** - Reference configuration file showing the complete ruleset structure
 - **github-branch-protection-and-status-checks.md** - Comprehensive setup guide and documentation
 
@@ -331,7 +331,7 @@ For solo developers using these rulesets:
 
 ## 📝 Notes
 
-- **Script location:** `github/rules/Set-Rulesets.ps1`
-- **Last updated:** December 15, 2025
+- **Script location:** `github/rules/Main branch ruleset/Set-Rulesets.ps1`
+- **Last updated:** June 16, 2026
 - **Designed for:** Solo developers and small teams
 - **Approach:** Non-destructive (skips existing rulesets)
